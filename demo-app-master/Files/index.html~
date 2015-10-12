@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <title>ZTDev Robocraft</title>
+    <script type="text/javascript" src="scripts.js"></script>
+  </head>
+
+  <body>
+    <div class="resizeGrip" id="resizeGripTopLeft" onmousedown="dragResize('TopLeft');"></div>
+    <div class="resizeGrip" id="resizeGripTop" onmousedown="dragResize('Top');"></div>
+    <div class="resizeGrip" id="resizeGripTopRight" onmousedown="dragResize('TopRight');"></div>
+    <div class="resizeGrip" id="resizeGripRight" onmousedown="dragResize('Right');"></div>
+    <div class="resizeGrip" id="resizeGripBottomRight" onmousedown="dragResize('BottomRight');"></div>
+    <div class="resizeGrip" id="resizeGripBottom" onmousedown="dragResize('Bottom');"></div>
+    <div class="resizeGrip" id="resizeGripBottomLeft" onmousedown="dragResize('BottomLeft');"></div>
+    <div class="resizeGrip" id="resizeGripLeft" onmousedown="dragResize('Left');"></div>
+    <div id="content" onmousedown="dragMove();">
+
+      <h1>ZTDev App</h1>
+      <button id="close" onclick="closeWindow();">Close</button>
+      <button id="open-subwindow" onclick="openSubWindow();">Open Sub-Window</button>
+      <button id="gameInfo" onclick="getGameInfo();">Get Game Info</button>
+      <button id="turnOnReplay" onclick="enableReplay();">Enable Replay</button>
+      <button id="turnOffReplay" onclick="disableReplay();">Disable Replay</button>
+      <button id="checkReplayStatus" onclick="checkReplayState();">[DEV] Check Replay State</button>
+      <button id="startReplay" onclick="startCapture();">Start Replay</button>
+      <button id="stopReplay" onclick="finishCapture();">Stop Replay</button>
+      <button id="capture" onclick="capture();">Capture</button>
+
+      <br>
+      
+      <div id="username"></div>
+      <div id="playerLevel"></div>
+      <div id="lastGameResult"></div>
+      <div id="rpReward"></div>
+      
+    </div>
+  </body>
+</html>

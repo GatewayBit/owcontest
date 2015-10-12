@@ -1,0 +1,205 @@
+// var gameTitleStr = "Robocraft";
+// var gameID = 104801;
+
+var gameInfoLaunched;
+overwolf.games.onGameLaunched.addListener(
+    function (value) {
+	console.log(value);
+	gameInfoLaunched = value;
+	console.log("This should say Robocraft or something.");
+    }
+);
+
+var gameInfoUpdate;
+overwolf.games.onGameInfoUpdated.addListener(
+    function (value) {
+	console.log(value);
+	gameInfoUpdate = value;
+	console.log("onGameInfoUpdated Fired!");
+    }
+);
+
+var playerDataInfoUpdates;
+overwolf.games.events.onInfoUpdates.addListener(
+    function (value) {
+	console.log("INFO UPDATES LISTENER STARTED!");
+	console.log(value);
+
+	fullDataList(value);
+
+	//console.log("Pushing data -> playerInfo()");
+	//playerInfo(value);
+
+	// May not be needed later.
+	playerDataInfoUpdates = value;
+    }
+);
+
+function fullDataList(data){
+    console.log("[DEV] Inside fullDataList method.");
+
+    for (var i = 0; i < data.info.length; i++) {
+	console.log("Category:" + data.info[i].category + " Key:" + data.info[i].key + " Value:" + data.info[i].value);
+
+
+	if (data.info[i].category === "playerData" && data.info[i].key === "username") {
+	    document.getElementById("username").innerHTML = "Username: " + data.info[i].value;
+	}
+
+	if (data.info[i].category === "playerData" && data.info[i].key === "playerLevel") {
+	    document.getElementById("playerLevel").innerHTML = "Level: " + data.info[i].value;
+	}
+
+	if (data.info[i].category === "playerData" && data.info[i].key === "lastGameResult") {
+	    document.getElementById("lastGameResult").innerHTML = "Last Game Results: " + data.info[i].value;
+	}
+
+	if (data.info[i].category === "lastGameRewards" && data.info[i].key === "rpReward") {
+	    document.getElementById("rpReward").innerHTML = "RP Reward: " + data.info[i].value;
+	}
+    }
+}
+
+function playerInfo(data){
+    console.log("[DEV] Inside playerInfo method.");
+    console.log(data);
+
+    for (var i = 0; i < data.info.length; i++) {
+	if(data.info[i].category === "playerData"){
+	    console.log(data.info[i].key + ": " + data.info[i].value);
+	}
+
+    }
+
+}
+
+var playerErrorEvents;
+overwolf.games.events.onError.addListener(
+    function (value) {
+	console.log(value);
+	console.log("ERROR EVENT LISTENER STARTED.");
+	playerErrorEvents;
+    }
+);
+
+var playerDataNewEvents;
+overwolf.games.events.onNewEvents.addListener(
+    function (value) {
+	for(var i = 0; i < value.events.length; i++)
+	{
+	    console.log('event name');
+	    console.log(value.events[i].name);
+	}
+    }
+);
+
+function dragResize(edge){
+    overwolf.windows.getCurrentWindow(function(result){
+	if (result.status=="success"){
+	    overwolf.windows.dragResize(result.window.id, edge);
+	}
+    });
+};
+
+function dragMove(){
+    overwolf.windows.getCurrentWindow(function(result){
+	if (result.status=="success"){
+	    overwolf.windows.dragMove(result.window.id);
+	}
+    });
+};
+
+function closeWindow(){
+    overwolf.windows.getCurrentWindow(function(result){
+	if (result.status=="success"){
+	    overwolf.windows.close(result.window.id);
+	}
+    });
+};
+
+function openSubWindow(){
+    alert("the subwindow will only be visible inside a game");
+    overwolf.windows.obtainDeclaredWindow("SubWindow", function(result){
+	if (result.status == "success"){
+	    overwolf.windows.restore(result.window.id, function(result){
+		console.log(result);
+	    });
+	}
+    });
+};
+
+function getGameInfo(){
+    overwolf.games.getRunningGameInfo(function(result){
+	console.log(result);
+    });
+}
+
+function enableReplay(){
+    var settings = {
+	"settingsxxxx": {
+	    "audio": {
+		"mic": {
+		    "volume": 100,
+		    "enabled": true
+		},
+		"game": {
+		    "volume": 100,
+		    "enabled": true
+		}
+	    },
+	    "peripherals": {
+		"capture_mouse_cursor": "both"
+	    }
+	}
+    }
+
+    overwolf.media.replays.turnOn(settings,
+				  function (result){
+				      if(result.status === "success")
+				      {
+					  alert("Replay Enabled.");
+					  console.log(result);
+				      }
+				  }
+				 );
+}
+
+
+function disableReplay(){
+    overwolf.media.replays.turnOff(function(result){
+	console.log(result);
+	alert("Replay disabled");
+    });
+}
+			
+
+function checkReplayState(){
+    overwolf.media.replays.getState(function (result){
+	alert(result.isOn);
+	console.log(result);
+    });
+}
+
+
+var replayID = "";
+function startCapture(){
+    overwolf.media.replays.startCapture(5000, function(result){
+	console.log(result);
+	replayID = result.url;
+    });
+}
+
+function finishCapture(){
+    overwolf.media.replays.finishCapture(replayID, function(result){
+	console.log(result);
+    });
+}
+
+function capture(){
+    overwolf.media.replays.capture(0, 5000, function(result){
+	console.log(result);
+    },
+				   function(result2){
+				       console.log(result2);
+				   });
+}
